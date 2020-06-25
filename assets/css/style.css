@@ -1,0 +1,255 @@
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* Remove default padding */
+ul[class],
+ol[class] {
+	padding: 0;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+	margin: 0;
+}
+
+/* Set core body defaults */
+html {
+	scroll-behavior: smooth;
+}
+
+body,
+main {
+	text-rendering: optimizeSpeed;
+	line-height: 1.5;
+}
+
+body {
+	font-family: 'Georgia', 'Times', 'Times New Roman', serif;
+	font-size: 18px;
+	color: #333;
+}
+
+main {
+	background-color: #fff;
+}
+
+/* Remove list styles on ul, ol elements with a class attribute */
+ul[class],
+ol[class] {
+	list-style: none;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+	text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img {
+	max-width: 100%;
+	display: block;
+}
+
+/* Natural flow and rhythm in sections by default */
+section > * + * {
+	margin-top: 1rem;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+.wrap {
+	max-width: 500px;
+	margin: 0 auto;
+}
+
+h1,
+h2 {
+	font-family: 'Old Standard TT', 'Georgia', 'Times', 'Times New Roman', serif;
+}
+
+h1 {
+	font-size: 2rem;
+	line-height: 1.4;
+	text-transform: uppercase;
+	color: #111;
+	margin-bottom: 25px;
+}
+
+h1 a {
+	color: inherit;
+	text-decoration: none;
+}
+
+h1 a:hover {
+	text-decoration: underline;
+}
+
+/* Header Form */
+
+header {
+	background-color: #f9f9f9;
+	padding: 40px 20px;
+	box-shadow: 0px 1px 0px rgba(17, 17, 26, 0.1);
+}
+
+@media only screen and (min-width: 600px) {
+	header {
+		padding: 80px 20px;
+	}
+}
+
+form {
+	max-width: 600px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+label {
+	display: block;
+	font-weight: 900;
+	margin-bottom: 5px;
+}
+
+input,
+button {
+	width: 100%;
+}
+
+input {
+	background-color: #ffffff;
+	border: 1px solid #c5c5c5;
+	font-size: 18px;
+	margin-bottom: 17px;
+	padding: 10px;
+	line-height: 1.15;
+	height: 46px;
+	vertical-align: middle;
+	color: #333;
+}
+
+button {
+	font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	text-transform: uppercase;
+	font-size: 16px;
+	background-color: #4f7b98;
+	border: none;
+	border-radius: 4px;
+	color: #fff;
+	padding: 12px 20px;
+	cursor: pointer;
+	margin-top: 5px;
+}
+
+/* Word List Component */
+
+.word-list {
+	padding: 40px 20px;
+}
+
+.word-list h2 {
+	font-size: 1.8rem;
+	margin-bottom: 15px;
+}
+
+.word-list .clue,
+.word-list .word {
+	margin: 0 0 5px;
+	font-style: italic;
+}
+
+.word-list .clue {
+	font-size: 20px;
+}
+
+.word-list .clue span {
+	font-weight: 700;
+}
+
+.word-list ol {
+	padding: 0;
+	margin-top: 30px;
+}
+
+.word-list ol li {
+	counter-increment: count;
+	list-style: none;
+	display: flex;
+	border-bottom: 1px solid #dee2e6;
+	padding: 5px;
+}
+
+.word-list ol li:first-child {
+	border-top: 1px solid #dee2e6;
+}
+
+.word-list ol li:nth-child(odd) {
+	background-color: #f9f9f9;
+}
+
+.word-list ol li:before {
+	font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	content: counter(count);
+	padding-right: 15px;
+	vertical-align: top;
+	color: #777;
+}
+
+.word-list ol li:nth-child(-n + 9):before {
+	content: '0' counter(count);
+}
+
+details[open] {
+	margin-bottom: 10px;
+}
+
+details p {
+	color: #666;
+	font-size: 17px;
+}
+
+summary {
+	cursor: pointer;
+}
+
+summary::-webkit-details-marker {
+	color: #333;
+	background-color: transparent;
+	font-size: 15px;
+}
+
+details[open] summary {
+	margin-bottom: 5px;
+}

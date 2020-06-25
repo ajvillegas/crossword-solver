@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Get word recommendations based on clues and known letters to help you solve your next crossword puzzle.">
+
+        <title>Crossword Solver</title>
+
+        <link rel="shortcut icon" href="assets/images/favicon.png">
+        <link href="//fonts.googleapis.com/css2?family=Old+Standard+TT:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="assets/css/style.css">
+    </head>
+
+    <body>
+        <main>
+            <header>
+                <div class="wrap">
+                    <h1><a href="index.html">Crossword Puzzle Solver</a></h1>
+
+                    <p>Get word recommendations based on given clues and known letters to help you solve your next crossword puzzle.</p>
+
+                    <form id="add-clues" method="get" action="?">
+                        <p>
+                            <label for="clue">Given Clue</label>
+                            <input type="text" name="ml" id="clue" placeholder="e.g. unstated yet understood" required>
+                        </p>
+
+                        <p>
+                            <label for="word">Known Letters</label>
+                            <input type="text" name="sp" id="word" placeholder="ta??t (? for unknown)">
+                        </p>
+
+                        <button>Find Words</button>
+                    </form>
+                </div>
+            </header>
+
+            <div id="app"></div>
+        </main>
+
+        <script>
+            // Select the <div> to display the data.
+            const app = document.querySelector('#app');
+
+            /**
+             * Sanitize and encode all HTML in a string to prevent XSS attacks.
+             * link: https://vanillajstoolkit.com/helpers/sanitizehtml/
+             * @param  {String} str The user-submitted string.
+             * @return {String} str The sanitized string.
+             */
+            const sanitizeHTML = function (string) {
+                const temp = document.createElement('div');
+                temp.textContent = string;
+                return temp.innerHTML;
+            };
+
+            /**
+             * Get the URL parameters.
+             * link: https://vanillajstoolkit.com/helpers/getparams/
+             * @param  {String} url The page URL.
+             * @return {Object}     The page URL parameters.
+             */
+            const getParams = function (url) {
+                const params = {};
+                const parser = document.createElement('a');
+                parser.href = url || window.location.href;
+                const query = parser.search.substring(1);
+                const vars = query.split('&');
+
+                if (vars.length < 1) {
+                    return params;
+                }
+
+                for (let i = 0; i < vars.length; i++) {
+                    const pair = vars[i].split('=');
+                    params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+                }
+
+                return params;
+            };
+
+            // Assign URL parameters to constant.
+            const params = getParams();
+
+            // Update the DOM when the API is down.
+            const renderNoResults = function () {
+                app.innerHTML = `
+                    <section id="results" class="word-list wrap">
+                        <h2>Sorry, No Results</h2>
+                        <p>We\'re not able to retrieve any words that match the provided clues, please try again.</p>
+                    </section>
+                `;
+            };
+
+            // Update the DOM when the API call is successful.
+            const renderResults = function (results) {
+                // If there's no results, display a message.
+                if (results.length < 1) {
+                    renderNoResults();
+                    return;
+                }
+
+                // Define the list items.
+                const wordList = results.map(function (result) {
+                    if (result.defs) {
+                        return `
+                            <li>
+                                <details>
+                                    <summary>${sanitizeHTML(result.word)}</summary>
+                                    <p>${sanitizeHTML(result.defs.join('; '))}</p>
+                                </details>
+                            </li>
+                        `;
+                    } else {
+                        return `<li>${sanitizeHTML(result.word)}</li>`;
+                    }
+                }).join('');
+
+                const wordCount = params['sp'].length > 0 ? params['sp'].length + ' letter word' : 'No word specified';
+
+                // Update the DOM.
+                app.innerHTML = `
+                <section id="results" class="word-list wrap">
+                    <h2>Word Suggestions</h2>
+                    <p class="clue"><span>Clue:</span> ${params['ml'].split('+').join(' ')}</p>
+                    <p class="word">${wordCount}</p>
+                    <ol>${wordList}</ol>
+                </section>
+                `;
+
+                // Auto scroll to results section.
+                const anchor = document.querySelector('#results');
+                anchor.scrollIntoView();
+            }
+
+            // Check if URL contains ISBN parameter.
+            if (params['ml'] || params['sp']) {
+                const api = `https://api.datamuse.com/words?ml=${params['ml']}&sp=${params['sp']}&md=d&max=20`;
+
+                // Make API call.
+                fetch(api).then(function (response) {
+                    // The API call was successful.
+                    if (response.ok) {
+                        // Return the JSON string promise.
+                        return response.json();
+                    }
+                    // Otherwise, reject.
+                    return Promise.reject(response);
+                }).then(function (data) {
+                    // Render the data into the DOM.
+                    renderResults(data);
+                }).catch(function (error) {
+                    // If there's an error, log it.
+                    console.warn(error);
+
+                    // Display error message.
+                    app.innerHTML = `
+                        <section id="results" class="word-list wrap">
+                            <h2>There was an Error</h2>
+                            <p>We\'re not able to retrieve this information at the moment, please try again later.</p>
+                        </section>
+                    `;
+                });
+            }
+        </script>
+    </body>
+
+</html>
