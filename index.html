@@ -195,6 +195,29 @@
                     `;
                 });
             }
+
+            // Select form elements.
+            const form = document.querySelector('form');
+            const lettersInput = document.querySelector('#word');
+            const lengthInput = document.querySelector('#length');
+            const clearButton = document.querySelector('button[type="button"]');
+
+            // Reset select input when user enters a value in known letters input field.
+            lettersInput.addEventListener('keydown', function (event) {
+                if ('' !== lettersInput) {
+                    lengthInput.selectedIndex = null;
+                }
+            }, false);
+
+            // Sync select input with known letters input field.
+            lengthInput.addEventListener('change', function (event) {
+                lettersInput.value = '?'.repeat(event.target.value);
+            }, false);
+
+            // Clear all fields with the clear button.
+            clearButton.addEventListener('click', function () {
+                form.reset();
+            }, false);
         </script>
     </body>
 
