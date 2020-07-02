@@ -188,7 +188,7 @@ button {
 
 button[type='button'] {
 	background-color: #a4b5c1;
-	text-shadow: 2px 1px 5px rgba(79, 123, 152, 0.5);
+	color: rgba(0, 0, 0, 0.8);
 }
 
 .stack {
